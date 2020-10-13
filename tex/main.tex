@@ -12,8 +12,11 @@
 \captionsetup{justification=centering,labelsep=defffis}
 
 \usepackage[mathscr]{eucal}
+\usepackage{braket}
 % Так ссылки в PDF будут активны
 \usepackage[unicode]{hyperref}
+\usepackage{mathtools}
+
 
 % вы сможете вставлять картинки командой \includegraphics[width=0.7\textwidth]{ИМЯ ФАЙЛА}
 % получается подключать, как минимум, файлы .pdf, .jpg, .png.
@@ -34,7 +37,7 @@
 \pagestyle{fancy}
 \makeatletter % сделать "@" "буквой", а не "спецсимволом" - можно использовать "служебные" команды, содержащие @ в названии
 \fancyhead[L]{\footnotesize}%Это будет написано вверху страницы слева
-\fancyhead[R]{\footnotesize Карамышев Антон}
+\fancyhead[R]{\footnotesize Karamyshev Anton}
 \fancyfoot[L]{\footnotesize \@author}%имя автора будет написано внизу страницы слева
 \fancyfoot[R]{\thepage}%номер страницы —- внизу справа
 \fancyfoot[C]{}%по центру внизу страницы пусто.
@@ -49,10 +52,69 @@
 
 \begin{document}
 
-$\operatorname{\text{\usefont{U}{BOONDOX-cal}{m}{n}w}}$
-$\mathcal{init}$
+Abstract—We propose a four-qubit quantum key distribution protocol via two Bell states which constitute a transmitted unit from the sender to the receiver in each communication. An encryption here is designed by randomly grouping four qubits of a unit into two new couples, which is a way to increase
+the possibility of detecting the eavesdropper. Ultimately, the receiver randomly measures this grouped unit with two Bell state measurements. From the comparison of grouping information of these four qubits, we find that the two sides in a valid communication can discover the illegal party in the channel. In the proposed protocol, the receiver measures the unit when he receives it instantly, which is an efficient way to overcome the ultrashort storage time of quantum state.
 
 
+\section{INTRODUCTION}
+
+Quantum key distribution (QKD) is a promising technology to protect the security of classical information in quantum epoch [1]. It enables two parties to share a secret key with unconditional security, which can then be used to encrypt and decrypt messages. Many works have been conducted to promote the development of QKD protocols. In 1984, it was Bennett and Brassard who first introduced the QKD protocol by using two mutually unbiased bases of photon’s polarization degree of freedom [2]. Later Ekert proposed another QKD protocol which was called E91 based on Einstein-Podolsky-Rosen (EPR) pairs [3]. After that, various QKD protocols are theoretically proposed and experimentally realized, such as QKD protocols designed with single-photon [4], multiple states [5] and Bell state [8]. Among these works, photons are extensively used to carry information because they are easy to manipulate and they transmit at light speed.
+
+As the quantum channel, Bell state was firstly proposed by [6] and verified to be the maximally entangled state of a two-qubit quantum system. Compared with other multi-qubit states, such as W state, GHZ state and cluster state, Bell state is easier to prepare via nonlinear process [7]. In reference [8], two parties share the secret key by comparing the form of initial Bell state and the outcome of entanglement swapping. Then, [9] improved the total efficiency of the communication to 100\% compared with the former 50\% in [8]. [10] presented the first authenticated semi-quantum key distribution protocol
+without using authenticated classical channels based on Bell states. In this paper, we propose a protocol to prevent the eavesdropper with lower qubit error rate and shorter detecting key bits based on a four-qubit state which consists of two couples of Bell states.
+
+In our protocol, a group of four-qubit state are prepared each time and sent from the sender to the receiver. The receiver performs quantum state measurement immediately after he receives the qubits. Compared with the two-way
+protocols where the quantum state needs to be preserved until the tranmission is finished in [8] and [9], our protocol can overcome the ultrashort coherence time of quantum states. Every four qubits form a unit to transfer information from the sender to the receiver in each communication. The four qubits are sent in random order by the sender and received by the receiver in a randomly grouping measurement. Our calculation shows that the qubit error rate is 4.17\%, which is lower than 46.875\% in [11]. Furthermore, only 11 bits are
+needed to detect the eavesdropper in our QKD protocol which is smaller than 72 bits in BB84 protocol [2] with the same security.
+
+\section{QKD PROTOCOL BASED ON FOUR-QUBIT STATES}
+
+\subsection{Quantum channel with Bell state}
+
+[8] and [9] proposed two QKD protocols, both used Bell states distributed from the sender to the receiver. In their protocols, two pairs of Bell states are shared between two legal parties of communication. The sender and the receiver both keep two qubits entangled with each other. After the simultaneous Bell state measurement (BSM) of the two parties, there exists an entanglement swapping among these four qubits.
+
+To be more specific, let’s denote the four qubits of two Bell states as $P_1$, $P_2$, $P_3$ and $P_4$. Entanglement exists between $P_1$ and $P_2$, $P_3$ and $P_4$. After BSM of the two sides, $P_1$ and $P_3$, $P_2$ and $P_4$ become entangled, respectively. However, the two sides still need to keep their qubits during communication, and it is challenging to store qubits in the state of the art.
+
+Consider the ultrashort storage time of qubits, a novel QKD protocol is proposed with a four-qubit state consisting of two couples of Bell states expressed as equation (1). A group of four-qubit state is prepared each time to send to Bob for measurement immediately. What is different from [8] and [9]
+is, the sender sends all the qubits to the receiver and the reciever performs quantum state measurement immediately when he receives the qubits. This is a one way process. The two parties don’t need to store the qubits thus the qubits are measured before they decoherence.
+
+\begin{equation*}
+\ket{\mathcal{C}}_{1234} = \ket{\Phi^-}_{12} \ket{\Phi^+}_{34}
+= \dfrac{1}{2} \Big(\ket{\Phi^+}_{13} \ket{\Phi^-}_{24} + 
+ 					\ket{\Phi^-}_{13} \ket{\Phi^+}_{24} +
+ 					\ket{\Psi^+}_{13} \ket{\Psi^-}_{24} +
+ 					\ket{\Psi^-}_{13} \ket{\Psi^+}_{24} \Big),
+\end{equation*}
+
+the subscripts $1$, $2$, $3$ and $4$ indicate four correlated qubits. The Bell states are expressed as
+
+\begin{equation*}
+\ket{\Phi^{\pm}} = \dfrac{1}{\sqrt2}\big(\ket{00} \pm \ket{11} \big), \quad
+\ket{\Psi^{\pm}} = \dfrac{1}{\sqrt2}\big(\ket{01} \pm \ket{10} \big).
+\end{equation*}
+
+From (1) we can see that the state becomes superposition of four states which means we can obtain four different outcomes by combinations of BSMs. Note that equation (1) represents only one special case, other two forms are shown
+for comparison in Table II with different groupings of qubits. In brief, there exists three forms of random grouping of these four qubits, of which only equation (1) is defined as the right one. This is the primary technique to encrypt the information during communication. The proposed protocol is illustrated in Fig. 1, where Alice and Bob are the legitimate sender and
+receiver, respectively.
+
+\subsection{Preliminiaries}
+In this section, we show the details of the protocol in Fig.~1.
+
+a) \textit{Step 1 state preparation}: Alice prepares one group of the four-qubit state in equation (1). Each group consists of four qubits $P_\gamma, \gamma \in \{1,2,3,4\}$. With such dense coding, the key information $\mathcal{K}$ of each group of the two Bell states is shown in Table I. Alice needs to record the information of qubits and the corresponding information $\mathcal{K}$.
+
+b) \textit{Step 2 qubit distribution}: According to equation (1), Alice knows that the group order of these four qubits is $\{(P_1, P_3), (P_2, P_4)\}$. Then, Alice rearranges these four qubits randomly and sends them to Bob via quantum channel.
+
+c) \textit{Step 3 grouping measurement}: Bob receives the qubits and divides them into two parts randomly. Then he performs BSMs on the two parts then sends the grouping information and the measurement results to Alice via classical channel.
+
+d) \textit{Step 4 results comparison}: Alice compares the results from Bob with her reserved information of $P_\gamma$. If Alice gets a coincident comparison, she announces $'1'$, and then the communication can proceed to step $5$ or returns to step $1$. Otherwise, she announces $'0'$ and the communication returns to step $1$ or ends. The different groupings of the four qubits by Bob are shown in Table $2$.
+
+e) \textit{Step 5 raw key acquirement}: Alice and Bob obtain a long binary sequence as the raw key $\mathcal{R}$ after multiple communications. If we define $\mathcal{R}_A$ and $\mathcal{R}_B$ as the raw keys belonging to Alice and Bob, respectively. Alice randomly selects parts of $\mathcal{R}_A$ in different positions as her agreement key $\mathcal{C}_A$ and announces the corresponding positions. Then, Bob chooses the agreed key $\mathcal{C}_B$ in the same location in $\mathcal{R}_B$.
+
+f) \textit{Step 6 privacy amplification}: Bob chooses a set of $\mathcal{C}_B$ bits as the parity bits $\mathcal{D}_B$ and announces $\mathcal{D}_B$ along with its corresponding positions. Alice selects her $\mathcal{D}_A$ in the same way and compares it with $\mathcal{D}_B$. If the bit error rate is smaller than the threshold, the communication is secure and they can proceed to step $7$; if not, they need to return to step $1$ or terminate this communication.
+
+g) \textit{Step 7 final key acquirement}: The final keys $\mathcal{R}’_A$, and $\mathcal{R}’_B$, are used to encrypt the secret message through the communication. Theoretically, $\mathcal{R}’_A$, = $\mathcal{R}’_B$, where $\mathcal{R}’_A$ is the raw key $\mathcal{R}_A$ without $\mathcal{C}_A$ under ideal condition, the same as $\mathcal{R}’_B$.
+
+\subsection{Analyses of the qubit error rate with different groupings}
 
 \end{document}
 
