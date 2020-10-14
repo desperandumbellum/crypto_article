@@ -76,7 +76,7 @@ needed to detect the eavesdropper in our QKD protocol which is smaller than 72 b
 To be more specific, let’s denote the four qubits of two Bell states as $P_1$, $P_2$, $P_3$ and $P_4$. Entanglement exists between $P_1$ and $P_2$, $P_3$ and $P_4$. After BSM of the two sides, $P_1$ and $P_3$, $P_2$ and $P_4$ become entangled, respectively. However, the two sides still need to keep their qubits during communication, and it is challenging to store qubits in the state of the art.
 
 Consider the ultrashort storage time of qubits, a novel QKD protocol is proposed with a four-qubit state consisting of two couples of Bell states expressed as equation (1). A group of four-qubit state is prepared each time to send to Bob for measurement immediately. What is different from [8] and [9]
-is, the sender sends all the qubits to the receiver and the reciever performs quantum state measurement immediately when he receives the qubits. This is a one way process. The two parties don’t need to store the qubits thus the qubits are measured before they decoherence.
+is, the sender sends all the qubits to the receiver and the receiver performs quantum state measurement immediately when he receives the qubits. This is a one way process. The two parties don’t need to store the qubits thus the qubits are measured before they decoherence.
 
 \begin{equation*}
 \ket{\mathcal{C}}_{1234} = \ket{\Phi^-}_{12} \ket{\Phi^+}_{34}
@@ -97,7 +97,7 @@ From (1) we can see that the state becomes superposition of four states which me
 for comparison in Table II with different groupings of qubits. In brief, there exists three forms of random grouping of these four qubits, of which only equation (1) is defined as the right one. This is the primary technique to encrypt the information during communication. The proposed protocol is illustrated in Fig. 1, where Alice and Bob are the legitimate sender and
 receiver, respectively.
 
-\subsection{Preliminiaries}
+\subsection{Preliminaries}
 In this section, we show the details of the protocol in Fig.~1.
 
 a) \textit{Step 1 state preparation}: Alice prepares one group of the four-qubit state in equation (1). Each group consists of four qubits $P_\gamma, \gamma \in \{1,2,3,4\}$. With such dense coding, the key information $\mathcal{K}$ of each group of the two Bell states is shown in Table I. Alice needs to record the information of qubits and the corresponding information $\mathcal{K}$.
@@ -115,6 +115,61 @@ f) \textit{Step 6 privacy amplification}: Bob chooses a set of $\mathcal{C}_B$ b
 g) \textit{Step 7 final key acquirement}: The final keys $\mathcal{R}’_A$, and $\mathcal{R}’_B$, are used to encrypt the secret message through the communication. Theoretically, $\mathcal{R}’_A$, = $\mathcal{R}’_B$, where $\mathcal{R}’_A$ is the raw key $\mathcal{R}_A$ without $\mathcal{C}_A$ under ideal condition, the same as $\mathcal{R}’_B$.
 
 \subsection{Analyses of the qubit error rate with different groupings}
+
+We can see that there are three different kinds of groupings from Table $2$ One is right, another two are wrong. Therefore, the probability of correctly grouping four qubits by Bob is $\frac{1}{3}$. If there is no eavesdropper in the communication channel, the qubit error rate $\varepsilon_0$, which is the threshold during one communication, can be calculated as following.
+
+(1) Bob divides the four qubits into the wrong grouping $\{(P_1 , P_2), (P_3 , P_4)\}$.
+
+\begin{equation*}
+\ket{\mathcal{C}}_{1234} = \dfrac{1}{2} \Big(\ket{0000} + \ket{0011}
+ + \ket{1100} + \ket{1111} \Big)_{1234} = 2 \Big(\ket{\Phi^-}_{12} \ket{\Phi^+}_{34}\Big).
+\end{equation*}
+
+In this case, he will only get $\ket{\Phi^-}_{12} \ket{\Phi^+}_{34}$. Bob will get the right binary random sequence $\mathcal{K} = 01$ with the probability of $\frac{1}{4}$ according to Table $1$.
+
+(2) Bob gets the correct measurement results via the other wrong grouping, $\{(P_1, P_4), (P_2, P_3)\}$.
+
+\begin{align*}
+\ket{\mathcal{C}}_{1234} = \dfrac{1}{2} \Big(\ket{0000} + \ket{0011}
+&+ \ket{1100} + \ket{1111} \Big)_{1234} \nonumber\\
+ = \dfrac{1}{2} \Big(
+\ket{\Phi^+}_{14} \ket{\Phi^-}_{23} + \ket{\Phi^-}_{14} \ket{\Phi^+}_{23} &+ 
+\ket{\Psi^+}_{14} \ket{\Psi^-}_{23} + \ket{\Psi^-}_{14} \ket{\Psi^+} \Big).
+\end{align*}
+
+By BSM, he can obtain four correct measurement results $\{\ket{\Phi^+}, \ket{\Phi^-}\}$, $\{\ket{\Phi^-}, \ket{\Phi^+}\}$, $\{\ket{\Psi^+}, \ket{\Psi^-}\}$ and $\{\ket{\Psi^-}, \ket{\Psi^+}\}$. As a result, Bob will get the right binary random sequence $\mathcal{K}$ with the probability of $\frac{4}{4} = 1$ even he makes a wrong grouping.
+
+In summary, the results of the BSM can only be partially right in the first case or totally right in the second case. Therefore, Bob can acquire the right binary random sequence
+with the probability of $\frac{1}{2} \cdot \frac{1}{4} + \frac{1}{2} \cdot \frac{4}{4} = \frac{5}{8}$ when grouping wrongly. Hence, the qubit error rate $\varepsilon_0$ is,
+
+\begin{equation*}
+\varepsilon_0 = 1 - \Big(\dfrac{1}{3} + \dfrac{5}{8}\Big) = \dfrac{1}{24} = 0.0417.
+\end{equation*}
+
+Note that if Bob chooses the right grouping with probability $\frac{1}{3}$, he can obtain the right binary random sequence with the probability of $1$. Ultimately, the threshold in our protocol can be set to be $4.17\%$.
+
+\section{SECURITY ANALYSES}
+In this section, we analyze the security of our protocol under two major attacks: the intercept-resend attack and the Trojan Horse attack. Meanwhile, we assume the existence of
+an eavesdropper Eve in the communication channel.
+
+\subsection{The intercept-resend attack}
+The eavesdropper Eve can interact and resend a new four-qubit state to Bob so that he can acquire the information of the state. In this case, Eve plays the same role as Bob does in the communication. He can group the four-qubit state and measure it with Bell bases.
+
+After step $2$ of our protocol, the four qubits sent by Alice will transmit through the communication channel. Let’s assume that Eve intercepts these four qubits and processes
+them in the same way as Bob does. Then, Eve resends his decoy four qubits to Bob. Let us discuss the different cases of the communication between Eve and Bob.
+
+($1$) Eve chooses the right grouping and acquires the right measurement results. Bob simultaneously chooses the right grouping. Now, there are three parties, Alice, Bob and Eve
+in the communication. There is a probability of $p_1$ that Eve can successfully filch the information,
+
+\begin{equation*}
+ p_1 = \Big(\dfrac{1}{3} \cdot 1 \Big)_{Eve} \times  \Big(\dfrac{1}{3} \cdot 1 \Big)_{Bob} = \dfrac{1}{9}.
+\end{equation*}
+
+(2) Similarly, Eve can divide the qubits and obtain the measurement results correctly. Then, he sends the right decoy four-qubit state to Bob. After receiving them, Bob chooses a wrong grouping but yields a right measurement result.
+
+However, this group of state will be abandoned since in the comparison stage Alice and Bob can detect the wrong grouping.
+
+
 
 \end{document}
 
