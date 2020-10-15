@@ -1,0 +1,230 @@
+
+
+\documentclass[a4paper,11pt]{article}
+\usepackage{amsmath,amssymb,amsfonts,amsthm, mathrsfs}
+\usepackage{tikz}
+\usepackage [utf8x] {inputenc}
+\usepackage [T2A] {fontenc} 
+\usepackage[russian]{babel}
+\usepackage{cmap} 
+\RequirePackage{caption}
+\DeclareCaptionLabelSeparator{defffis}{. }
+\captionsetup{justification=centering,labelsep=defffis}
+
+\usepackage[mathscr]{eucal}
+\usepackage{braket}
+% Так ссылки в PDF будут активны
+\usepackage[unicode]{hyperref}
+\usepackage{mathtools}
+
+
+% вы сможете вставлять картинки командой \includegraphics[width=0.7\textwidth]{ИМЯ ФАЙЛА}
+% получается подключать, как минимум, файлы .pdf, .jpg, .png.
+\usepackage{graphicx}
+% Если вы хотите явно указать поля:
+\usepackage[margin=1in]{geometry}
+% Или если вы хотите задать поля менее явно (чем больше DIV, тем больше места под текст):
+% \usepackage[DIV=10]{typearea}
+
+\usepackage{fancyhdr}
+
+\newcommand{\bbR}{\mathbb R}%теперь вместо длинной команды \mathbb R (множество вещественных чисел) можно писать короткую запись \bbR. Вместо \bbR вы можете вписать любую строчку букв, которая начинается с '\'.
+\newcommand{\eps}{\varepsilon}
+\newcommand{\bbN}{\mathbb N}
+\newcommand{\dif}{\mathrm{d}}
+\usepackage[cal=boondox]{mathalfa}
+
+\pagestyle{fancy}
+\makeatletter % сделать "@" "буквой", а не "спецсимволом" - можно использовать "служебные" команды, содержащие @ в названии
+\fancyhead[L]{\footnotesize}%Это будет написано вверху страницы слева
+\fancyhead[R]{\footnotesize Karamyshev Anton}
+\fancyfoot[L]{\footnotesize \@author}%имя автора будет написано внизу страницы слева
+\fancyfoot[R]{\thepage}%номер страницы —- внизу справа
+\fancyfoot[C]{}%по центру внизу страницы пусто.
+\renewcommand{\maketitle}{%
+	\noindent{\bfseries\scshape\large\@title\ \mdseries\upshape}\par
+	\noindent {\large\itshape\@author}
+	\vskip 2ex}
+\makeatother
+\def\dd#1#2{\frac{\partial#1}{\partial#2}}
+
+\usepackage{xcolor}
+
+\begin{document}
+
+\textbf{Abstract} --- Мы предлагаем четырехкубитный квантовый протокол распределения ключей, базирующийся на измерении двух состояния Белла. Кубиты объединяются в единый блок, передаваемый от отправителя к получателю в каждом сообщении. Шифрование здесь разработано путем случайной группировки четырех отдельных кубитов в две новые пары, такой механизм также является одним из способов обнаружить подслушивающее устройство в канале. В конечном счете, приемник случайным образом проверяет полученный блок при помощи двух измерений состояний Белла. Из сравнения информации о группировке этих четырех кубитов обе стороны соединения могут обнаружить нелегального пользователя в канале. В предложенном протоколе приемник обрабатывает блок мгновенно во время получения, что является эффективным способом преодоления ультракороткого времени хранения квантового состояния.
+
+
+
+\section{INTRODUCTION}
+
+Квантовое распределение ключей (QKD) является перспективной технологией защиты безопасности классической информации в квантовую эпоху [1]. Она позволяет двум сторонам обмениваться секретным ключом с безусловной безопасностью, который затем может быть использован для шифрования и расшифровки сообщений. В настоящее время опубликовано довольно много работ по данной тематике. В 1984 году Беннетт и Брассард впервые ввели протокол QKD, основанный на использовании двух взаимно несмещенных состояний поляризации фотонов [2]. Позднее Экерт предложил другой протокол QKD, который получил название E91, основанный на парадоксе Эйнштейна-Подольского-Розена (EPR) [3]. После этого были теоретически предложены и экспериментально реализованы различные протоколы QKD, такие как протоколы QKD, разработанные с однофотонными [4], множественными состояниями [5] и состоянием Белла [8]. Среди этих работ фотоны широко используются для переноса информации, поскольку ими легко манипулировать и они передают со скоростью света.
+
+В качестве квантового канала состояние Белла было впервые предложено [6] и подтверждено как максимально запутанное состояние двухкубитной квантовой системы. По сравнению с другими мультикубитовыми состояниями, такими как состояние W, GHZ и кластерное состояние, состояние Белла легче всего реализовать с помощью нелинейного процесса [7]. В ссылке [8] две стороны разделяют секретный ключ, сравнивая форму начального состояния Белла и результат перекрутки. Затем [9] повысил общую эффективность коммуникации до 100\% по сравнению с первым 50\% в [8]. В [10] представлен первый аутентифицированный полуквантовый протокол распределения ключей без использования аутентифицированных классических каналов, основанных на состояниях Белла. В данной работе мы предлагаем протокол для предотвращения подслушивания с более низким коэффициентом ошибок при подтверждении и более коротким временем обнаружения ключевых битов, основанных на четырехкубитном состоянии, которое состоит из двух пар состояний Белла.
+
+В нашем протоколе каждый раз подготавливается группа состоящая из четырёх кубитов, которая затем передаётся от отправителя к получателю. Приемник производит квантовое измерение состояния сразу после получения кубитов. По сравнению с двусторонними протоколами, в которых квантовое состояние должно сохраняться до завершения передачи в [8] и [9], наш протокол может преодолеть проблему времени ультракороткой когерентности квантовых состояний. Каждые четыре кубита образуют единый блок для передачи информации от отправителя к получателю в каждом сообщении. Четыре выхода посылаются отправителем в случайном порядке и принимаются получателем в некотором случайном групповом измерении. Наши расчеты показывают, что коэффициент ошибок при выходе составляет 4.17\%, что ниже, чем 46.875\% в [11]. Кроме того, только 11 бит необходимы для обнаружения подслушивающего устройства в нашем QKD протоколе, которое меньше 72 бит в BB84 протоколе [2] с тем же уровнем безопасности.
+\section{QKD PROTOCOL BASED ON FOUR-QUBIT STATES}
+
+\subsection{Quantum channel with Bell state}
+
+[8] and [9] proposed two QKD protocols, both used Bell states distributed from the sender to the receiver. In their protocols, two pairs of Bell states are shared between two legal parties of communication. The sender and the receiver both keep two qubits entangled with each other. After the simultaneous Bell state measurement (BSM) of the two parties, there exists an entanglement swapping among these four qubits.
+
+To be more specific, let’s denote the four qubits of two Bell states as $P_1$, $P_2$, $P_3$ and $P_4$. Entanglement exists between $P_1$ and $P_2$, $P_3$ and $P_4$. After BSM of the two sides, $P_1$ and $P_3$, $P_2$ and $P_4$ become entangled, respectively. However, the two sides still need to keep their qubits during communication, and it is challenging to store qubits in the state of the art.
+
+Consider the ultrashort storage time of qubits, a novel QKD protocol is proposed with a four-qubit state consisting of two couples of Bell states expressed as equation (1). A group of four-qubit state is prepared each time to send to Bob for measurement immediately. What is different from [8] and [9]
+is, the sender sends all the qubits to the receiver and the receiver performs quantum state measurement immediately when he receives the qubits. This is a one way process. The two parties don’t need to store the qubits thus the qubits are measured before they decoherence.
+
+\begin{equation*}
+\ket{\mathcal{C}}_{1234} = \ket{\Phi^-}_{12} \ket{\Phi^+}_{34}
+= \dfrac{1}{2} \Big(\ket{\Phi^+}_{13} \ket{\Phi^-}_{24} + 
+ 					\ket{\Phi^-}_{13} \ket{\Phi^+}_{24} +
+ 					\ket{\Psi^+}_{13} \ket{\Psi^-}_{24} +
+ 					\ket{\Psi^-}_{13} \ket{\Psi^+}_{24} \Big),
+\end{equation*}
+
+the subscripts $1$, $2$, $3$ and $4$ indicate four correlated qubits. The Bell states are expressed as
+
+\begin{equation*}
+\ket{\Phi^{\pm}} = \dfrac{1}{\sqrt2}\big(\ket{00} \pm \ket{11} \big), \quad
+\ket{\Psi^{\pm}} = \dfrac{1}{\sqrt2}\big(\ket{01} \pm \ket{10} \big).
+\end{equation*}
+
+From (1) we can see that the state becomes superposition of four states which means we can obtain four different outcomes by combinations of BSMs. Note that equation (1) represents only one special case, other two forms are shown
+for comparison in Table II with different groupings of qubits. In brief, there exists three forms of random grouping of these four qubits, of which only equation (1) is defined as the right one. This is the primary technique to encrypt the information during communication. The proposed protocol is illustrated in Fig. 1, where Alice and Bob are the legitimate sender and
+receiver, respectively.
+
+\subsection{Preliminaries}
+In this section, we show the details of the protocol in Fig.~1.
+
+a) \textit{Step 1 state preparation}: Alice prepares one group of the four-qubit state in equation (1). Each group consists of four qubits $P_\gamma, \gamma \in \{1,2,3,4\}$. With such dense coding, the key information $\mathcal{K}$ of each group of the two Bell states is shown in Table I. Alice needs to record the information of qubits and the corresponding information $\mathcal{K}$.
+
+b) \textit{Step 2 qubit distribution}: According to equation (1), Alice knows that the group order of these four qubits is $\{(P_1, P_3), (P_2, P_4)\}$. Then, Alice rearranges these four qubits randomly and sends them to Bob via quantum channel.
+
+c) \textit{Step 3 grouping measurement}: Bob receives the qubits and divides them into two parts randomly. Then he performs BSMs on the two parts then sends the grouping information and the measurement results to Alice via classical channel.
+
+d) \textit{Step 4 results comparison}: Alice compares the results from Bob with her reserved information of $P_\gamma$. If Alice gets a coincident comparison, she announces $'1'$, and then the communication can proceed to step $5$ or returns to step $1$. Otherwise, she announces $'0'$ and the communication returns to step $1$ or ends. The different groupings of the four qubits by Bob are shown in Table $2$.
+
+e) \textit{Step 5 raw key acquirement}: Alice and Bob obtain a long binary sequence as the raw key $\mathcal{R}$ after multiple communications. If we define $\mathcal{R}_A$ and $\mathcal{R}_B$ as the raw keys belonging to Alice and Bob, respectively. Alice randomly selects parts of $\mathcal{R}_A$ in different positions as her agreement key $\mathcal{C}_A$ and announces the corresponding positions. Then, Bob chooses the agreed key $\mathcal{C}_B$ in the same location in $\mathcal{R}_B$.
+
+f) \textit{Step 6 privacy amplification}: Bob chooses a set of $\mathcal{C}_B$ bits as the parity bits $\mathcal{D}_B$ and announces $\mathcal{D}_B$ along with its corresponding positions. Alice selects her $\mathcal{D}_A$ in the same way and compares it with $\mathcal{D}_B$. If the bit error rate is smaller than the threshold, the communication is secure and they can proceed to step $7$; if not, they need to return to step $1$ or terminate this communication.
+
+g) \textit{Step 7 final key acquirement}: The final keys $\mathcal{R}’_A$, and $\mathcal{R}’_B$, are used to encrypt the secret message through the communication. Theoretically, $\mathcal{R}’_A$, = $\mathcal{R}’_B$, where $\mathcal{R}’_A$ is the raw key $\mathcal{R}_A$ without $\mathcal{C}_A$ under ideal condition, the same as $\mathcal{R}’_B$.
+
+\subsection{Analyses of the qubit error rate with different groupings}
+
+We can see that there are three different kinds of groupings from Table $2$ One is right, another two are wrong. Therefore, the probability of correctly grouping four qubits by Bob is $\frac{1}{3}$. If there is no eavesdropper in the communication channel, the qubit error rate $\varepsilon_0$, which is the threshold during one communication, can be calculated as following.
+
+(1) Bob divides the four qubits into the wrong grouping $\{(P_1 , P_2), (P_3 , P_4)\}$.
+
+\begin{equation*}
+\ket{\mathcal{C}}_{1234} = \dfrac{1}{2} \Big(\ket{0000} + \ket{0011}
+ + \ket{1100} + \ket{1111} \Big)_{1234} = 2 \Big(\ket{\Phi^-}_{12} \ket{\Phi^+}_{34}\Big).
+\end{equation*}
+
+In this case, he will only get $\ket{\Phi^-}_{12} \ket{\Phi^+}_{34}$. Bob will get the right binary random sequence $\mathcal{K} = 01$ with the probability of $\frac{1}{4}$ according to Table $1$.
+
+(2) Bob gets the correct measurement results via the other wrong grouping, $\{(P_1, P_4), (P_2, P_3)\}$.
+
+\begin{align*}
+\ket{\mathcal{C}}_{1234} = \dfrac{1}{2} \Big(\ket{0000} + \ket{0011}
+&+ \ket{1100} + \ket{1111} \Big)_{1234} \nonumber\\
+ = \dfrac{1}{2} \Big(
+\ket{\Phi^+}_{14} \ket{\Phi^-}_{23} + \ket{\Phi^-}_{14} \ket{\Phi^+}_{23} &+ 
+\ket{\Psi^+}_{14} \ket{\Psi^-}_{23} + \ket{\Psi^-}_{14} \ket{\Psi^+} \Big).
+\end{align*}
+
+By BSM, he can obtain four correct measurement results $\{\ket{\Phi^+}, \ket{\Phi^-}\}$, $\{\ket{\Phi^-}, \ket{\Phi^+}\}$, $\{\ket{\Psi^+}, \ket{\Psi^-}\}$ and $\{\ket{\Psi^-}, \ket{\Psi^+}\}$. As a result, Bob will get the right binary random sequence $\mathcal{K}$ with the probability of $\frac{4}{4} = 1$ even he makes a wrong grouping.
+
+In summary, the results of the BSM can only be partially right in the first case or totally right in the second case. Therefore, Bob can acquire the right binary random sequence
+with the probability of $\frac{1}{2} \cdot \frac{1}{4} + \frac{1}{2} \cdot \frac{4}{4} = \frac{5}{8}$ when grouping wrongly. Hence, the qubit error rate $\varepsilon_0$ is,
+
+\begin{equation*}
+\varepsilon_0 = 1 - \Big(\dfrac{1}{3} + \dfrac{5}{8}\Big) = \dfrac{1}{24} = 0.0417.
+\end{equation*}
+
+Note that if Bob chooses the right grouping with probability $\frac{1}{3}$, he can obtain the right binary random sequence with the probability of $1$. Ultimately, the threshold in our protocol can be set to be $4.17\%$.
+
+\section{SECURITY ANALYSES}
+In this section, we analyze the security of our protocol under two major attacks: the intercept-resend attack and the Trojan Horse attack. Meanwhile, we assume the existence of
+an eavesdropper Eve in the communication channel.
+
+\subsection{The intercept-resend attack}
+The eavesdropper Eve can interact and resend a new four-qubit state to Bob so that he can acquire the information of the state. In this case, Eve plays the same role as Bob does in the communication. He can group the four-qubit state and measure it with Bell bases.
+
+After step $2$ of our protocol, the four qubits sent by Alice will transmit through the communication channel. Let’s assume that Eve intercepts these four qubits and processes
+them in the same way as Bob does. Then, Eve resends his decoy four qubits to Bob. Let us discuss the different cases of the communication between Eve and Bob.
+
+($1$) Eve chooses the right grouping and acquires the right measurement results. Bob simultaneously chooses the right grouping. Now, there are three parties, Alice, Bob and Eve
+in the communication. There is a probability of $p_1$ that Eve can successfully filch the information,
+
+\begin{equation*}
+ p_1 = \Big(\dfrac{1}{3} \cdot 1 \Big)_{Eve} \times  \Big(\dfrac{1}{3} \cdot 1 \Big)_{Bob} = \dfrac{1}{9}.
+\end{equation*}
+
+(2) Similarly, Eve can divide the qubits and obtain the measurement results correctly. Then, he sends the right decoy four-qubit state to Bob. After receiving them, Bob chooses a wrong grouping but yields a right measurement result.
+
+However, this group of state will be abandoned since in the comparison stage Alice and Bob can detect the wrong grouping.
+
+\begin{equation*}
+p_2 = \Big(\dfrac{1}{3}\cdot 1 \Big)_{Eve} \times \Big(\dfrac{2}{3}\cdot \dfrac{1}{4} + 
+\dfrac{2}{3} \cdot \dfrac{5}{8} \Big)_{Bob} = \dfrac{14}{72}.
+\end{equation*}
+
+(3) Eve chooses a wrong grouping but he gets a right measurement result while Bob chooses a right grouping.
+
+\begin{equation*}
+p_3 = \Big(\dfrac{2}{3}\cdot \dfrac{1}{4} + 
+\dfrac{2}{3} \cdot \dfrac{5}{8} \Big)_{Eve} \times \Big( \dfrac{1}{3}\cdot 1 \Big)_{Bob} = \dfrac{14}{72}.
+\end{equation*}
+
+(4) In the same way, Eve transmits the decoy state with a wrong grouping but Bob gets the right results. Meanwhile, Bob divides this decoy four-qubit state into wrong groups but
+obtain the right measurement result. In this case, the qubits will be abandoned because of the wrong grouping of Bob.
+
+\begin{equation*}
+p_4 = Big(\dfrac{2}{3}\cdot \dfrac{1}{4} + 
+\dfrac{2}{3} \cdot \dfrac{5}{8} \Big)_{Eve} \times \Big(\dfrac{2}{3}\cdot \dfrac{1}{4} + 
+\dfrac{2}{3} \cdot \dfrac{5}{8} \Big)_{Bob} = \dfrac{49}{144}.
+\end{equation*}
+
+In conclusion, there is a probability that Bob gets a wrong measurement result, i.e., the qubit error rate with existence of eavesdropper in our protocol can be calculated as (8).
+
+\begin{equation*}
+\varepsilon_e = 1 - \Big(\dfrac{1}{9} + \dfrac{14}{72} + \dfrac{14}{72} + \dfrac{49}{144} \Big) = \dfrac{23}{144} = 0.1597.
+\end{equation*}
+
+Suppose Alice and Bob need to compare n bits of binary random sequence to detect Eve with the probability of $p_d = 0.999999999$ with
+
+\begin{equation*}
+p_d = 1 - (1-\varepsilon_e) = 1 - \Big(\dfrac{23}{144} \Big)^n.
+\end{equation*}
+
+We can find a minimum value of $n = 11$ from equation (9). On the other hand, in BB84 protocol, Alice and Bob need to compare $n = 72$ bits to detect Eve with the same probability. From the aforementioned analyses, we can calculate the mutual information between Alice, Bob and Eve. The mutual information between Alice and Bob is
+
+\begin{equation*}
+I(A; B) = 1 - [-(1-\varepsilon_0)log(1-\varepsilon_0) - \varepsilon_0 log \varepsilon_0] = 0.7501.
+\end{equation*}
+
+The mutual information between Alice and Eve is 
+\begin{equation*}
+I(A; E) = 1 - [-(1-\varepsilon_e)log(1-\varepsilon_e) - \varepsilon_e log \varepsilon_e] = 0.3664.
+\end{equation*}
+
+Therefore, the communication is secure since $I(A; B) > I(A; E)$. Furthermore, $I(A; B)$ in our protocol is greater than $I' (A; B) = 0.1887$ bit in BB84 protocol.
+The theoretical secret key rate is
+\begin{equation*}
+R = I(A; B) - I(A; E) = 0.7501 - 0.3664 = 0.3837 > 0.
+\end{equation*}
+
+So, the binary random bits can be distilled after Alice and Bob perform key reconciliation and privacy amplification on the final key $\mathcal{R}'_A$ and $\mathcal{R}'_B$. The transmission distance $\mathcal{l}$ of the secret key is given by the qubit error rate $\varepsilon$ [12], which is:
+
+\begin{equation*}
+\varepsilon = \dfrac{\mu \eta 10^{- \frac{\alpha \mathcal{l}}{10}}}{\mu \eta 10^{- \frac{\alpha \mathcal{l}}{10}} + 2P_e}, 
+\end{equation*}
+
+where $\mu = 4$ is the averaged qubit flux leaving from Alice, $10^{- \frac{\alpha \mathcal{l}}{10}}$ represents the fiber attenuation through distance $\mathcal{l}$,
+$\eta$ is the detection efficiency. Here, we set the channel loss to be $\alpha = 0.2$ and
+$\alpha = 0.5$. Referring to [12], $P_e = 8.5 \cdot 10^{−7}$ is the probability of an error count per clock cycle. We set the values of $\eta$ to be $0.2$, $0.5$ and $0.99$.
+Figure 2 shows the relation between $\mathcal{l}$ (km) and the qubit error rate $\varepsilon$. We can see that $\mathcal{l}$ decreases with the increase of the channel loss. Meanwhile, the higher the detection efficiency of the communication $\eta$ is, the larger the qubit error rate $\varepsilon$ is. From Fig. 2, we can infer that there exists a further distance when $\varepsilon_e$ = 0.0417 which is the qubit error rate in our protocol.
+
+\end{document}
+
