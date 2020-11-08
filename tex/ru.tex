@@ -38,7 +38,7 @@
 \makeatletter % сделать "@" "буквой", а не "спецсимволом" - можно использовать "служебные" команды, содержащие @ в названии
 \fancyhead[L]{\footnotesize}%Это будет написано вверху страницы слева
 \fancyhead[R]{\footnotesize Karamyshev Anton}
-\fancyfoot[L]{\footnotesize \@author}%имя автора будет написано внизу страницы слева
+%\fancyfoot[L]{\footnotesize \@author}%имя автора будет написано внизу страницы слева
 \fancyfoot[R]{\thepage}%номер страницы —- внизу справа
 \fancyfoot[C]{}%по центру внизу страницы пусто.
 \renewcommand{\maketitle}{%
@@ -52,6 +52,8 @@
 
 
 \bibliographystyle{acm}% Choose Phys. Rev. style for bibliography
+
+\author{Karamyshev}
 
 \begin{document}
 
@@ -154,7 +156,7 @@
 
 \item \textit{Шаг 6. Усиление конфиденциальности.} Из полученного набора битов $\mathcal{C}_B$ Боб выбирает некоторые в качестве битов чётности $\mathcal{D}_B$ и объявляет $\mathcal{D}_B$ вместе с их соответствующими позициями. Аналогичным образом Алиса выбирает свой набор $\mathcal{D}_A$ и сравнивает его с полученным $\mathcal{D}_B$. Если процент битовых ошибок в таком сравнении меньше некоторого наперёд заданного порога, то соединение может считаться безопасным и процесс коммуникации может перейти к следующему шагу $7$; если нет, то необходимо вернуться на шаг $1$ или же окончательно оборвать связь.
 
-\item \textit{Шаг 7. Формирование окончательных ключей.} На последнем шаге окончательно выбираются ключи $\mathcal{R}’_A$ и $\mathcal{R}’_B$, которые будут использоваться для шифрования в дальнейшем процессе коммуникации. Теоретически, в идеальном случае должно получиться $\mathcal{R}’_A$ = $\mathcal{R}’_B$, где $\mathcal{R}’_A$ --- это необработанный ключ $\mathcal{R}_A$ исключая биты $\mathcal{C}_A$, аналогичное верно для $\mathcal{R}’_B$.
+\item \textit{Шаг 7. Формирование окончательных ключей.} На последнем шаге окончательно выбираются ключи $\mathcal{R'}_A$ и $\mathcal{R'}_B$, которые будут использоваться для шифрования в дальнейшем процессе коммуникации. Теоретически, в идеальном случае должно получиться $\mathcal{R'}_A$ = $\mathcal{R'}_B$, где $\mathcal{R'}_A$ --- это необработанный ключ $\mathcal{R}_A$ исключая биты $\mathcal{C}_A$, аналогичное верно для $\mathcal{R'}_B$.
 \end{itemize}
 
 \subsection{Анализ доли ошибочных кубитов}
@@ -275,12 +277,35 @@ Figure 2 shows the relation between $\mathcal{l}$ (km) and the qubit error rate 
 
 \cite{base}
 
+\section{Numerical Appendix}
+
 \begin{equation*}
- PLR = \dfrac{\sum_{m=1}^M C_M^m \pi_{\mathcal{On}}^m (1 - \pi_{\mathcal{On}})^{M-m} PLR (\hat{\lambda} = m\lambda)}
- {1 - (1 -\pi_{\mathcal{On}})^M}
+\ket{\phi^{\pm}} = \dfrac{1}{\sqrt2}\big(\ket{00} \pm \ket{11} \big), \quad
+\ket{\psi^{\pm}} = \dfrac{1}{\sqrt2}\big(\ket{01} \pm \ket{10} \big).
 \end{equation*}
 
 
+
+\begin{align*}
+\ket{\mathcal{C}}_{1234} = \ket{\phi^-}_{12} \otimes \ket{\phi^+}_{34}
+= \dfrac{1}{2} \big(\ket{00}_{12} - \ket{11}_{12} \big) \otimes \big( \ket{00}_{34} + \ket{11}_{34} \big) = \nonumber \\
+= \dfrac{1}{2} \big(\ket{0000} + \ket{0011} - \ket{1100} - \ket{1111}\big)_{1234} =
+\end{align*}
+
+\begin{align*}
+\ket{\mathcal{C}}_{1234} = \dfrac{1}{2} \Big(\ket{\phi^+}_{13} \ket{\phi^-}_{24} + 
+\ket{\phi^-}_{13} \ket{\phi^+}_{24} +
+\ket{\psi^+}_{13} \ket{\psi^-}_{24} +
+\ket{\psi^-}_{13} \ket{\psi^+}_{24} \Big) = \nonumber \\
+\end{align*}
+
+\begin{align*}
+\ket{\phi^+}_{m} \ket{\phi^-}_{n} = \dfrac{1}{2} \big(\ket{00}_m \ket{00}_n - \ket{00}_m \ket{11}_n + \ket{11}_m \ket{00}_n - \ket{11}_m \ket{11}_n \big) \nonumber \\
+\ket{\phi^-}_{m} \ket{\phi^+}_{n} = \dfrac{1}{2} \big(\ket{00}_m \ket{00}_n + \ket{00}_m \ket{11}_n - \ket{11}_m \ket{00}_n - \ket{11}_m \ket{11}_n \big) \nonumber \\
+\ket{\psi^+}_{m} \ket{\psi^-}_{n} = \dfrac{1}{2} \big(\ket{01}_m \ket{01}_n - \ket{01}_m \ket{10}_n + \ket{10}_m \ket{01}_n - \ket{10}_m \ket{10}_n \big)
+\nonumber \\
+\ket{\psi^-}_{m} \ket{\psi^+}_{n} = \dfrac{1}{2} \big(\ket{01}_m \ket{01}_n + \ket{01}_m \ket{10}_n - \ket{10}_m \ket{01}_n - \ket{10}_m \ket{10}_n \big)
+\end{align*}
 
 \bibliography{ru}
 
