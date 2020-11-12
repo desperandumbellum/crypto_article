@@ -32,7 +32,7 @@
 \newcommand{\eps}{\varepsilon}
 \newcommand{\bbN}{\mathbb N}
 \newcommand{\dif}{\mathrm{d}}
-\usepackage[cal=boondox]{mathalfa} %todo
+%\usepackage[cal=boondox]{mathalfa} %todo
 
 \pagestyle{fancy}
 \makeatletter % сделать "@" "буквой", а не "спецсимволом" - можно использовать "служебные" команды, содержащие @ в названии
@@ -71,7 +71,7 @@
 Позднее Экерт предложил другой протокол QKD \cite{E91}, названный E91, основанный на парадоксе Эйнштейна-Подольского-Розена \cite{EPR}. После этого были теоретически предложены и экспериментально реализованы различные протоколы QKD, например, базирующиеся на однофотонных \cite{liang2015simple} и множественных состояниях \cite{fourstate}. Среди этих работ для переноса информации широко используются фотоны, поскольку ими легко манипулировать и они передают информацию со скоростью света.
 
 Новый виток в развитии QKD связан с использованием состояний Белла \cite{EPR}.
-В качестве квантового канала состояние Белла было впервые предложено в \cite{Gao} и подтверждено как максимально запутанное состояние двухкубитной квантовой системы. Кроме того, по сравнению с другими мультикубитными состояниями (состояния W \cite{W}, GHZ \cite{GHZ} и кластерные состояния \cite{cluster}), состояние Белла легче всего реализовать с помощью нелинейного процесса, описанного в  \cite{twophotons}. 
+В качестве квантового канала состояние Белла было впервые предложено в \cite{Gao} и подтверждено \cite{bellstatescomp} как максимально запутанное состояние двухкубитной квантовой системы. Кроме того, по сравнению с другими мультикубитными состояниями (состояния W \cite{W}, GHZ \cite{GHZ} и кластерные состояния \cite{cluster}), состояние Белла легче всего реализовать с помощью нелинейного процесса, описанного в  \cite{twophotons}. 
 
 В основополагающей работе \cite{Gao} две стороны разделяют секретный ключ, сравнивая форму начального состояния Белла и результат измерения состояния Белла после квантовой перекрутки %todo.
 Затем \cite{nine} повысил общую эффективность коммуникации до 100\% по сравнению с достигнутыми 50\% в \cite{Gao}. В \cite{ten} представлен первый аутентифицированный полуквантовый протокол распределения ключей без использования аутентифицированных классических каналов, основанный на состояниях Белла.
@@ -140,11 +140,16 @@
 
 Из (1) видно, что состояние становится суперпозицией четырех состояний, что означает, что мы можем получить четыре различных результата с помощью комбинаций состояний Белла. Обратим внимание, что уравнение (1) представляет только один особый случай, две другие формы с различными группировками кубитов для сравнения показаны в Таблице II. Вкратце, существует три формы случайной группировки этих четырех кубитов, из которых только уравнение (1) определено как правильное. Это основной метод шифрования информации во время коммуникации. Предлагаемый протокол показан на Рис. 1, где Алиса и Боб являются законными отправителем и приемником соответственно.
 
+\begin{figure}[h]
+	\center{\includegraphics[width=1\linewidth]{scheme.png}}
+	\label{ris:image1}
+\end{figure}
+
 \subsection{Алгоритм формирования ключей}
 
 \begin{itemize}
 
-\item \textit{Шаг 1. Подготовка состояний.} Алиса подготавливает одну из комбинаций четырёхкубитных состояний, представленных в уравнении (1). Каждая такая группа состоит из четырёх кубитов $P_\gamma, \gamma \in \{1,2,3,4\}$. Для такого способа кодирования информация ключа $\mathcal{K}$ в соответствии с состоянием Белла представлена в таблице 1. Алиса запоминает текущее состоянии кубитов и соответствующую информацию ключа $\mathcal{K}$.
+\item \textit{Шаг 1. Подготовка состояний.} Алиса подготавливает одну из комбинаций четырёхкубитных состояний, представленных в уравнении (1). Каждая такая группа состоит из четырёх кубитов $P_\gamma$, где $\gamma \in \{1,2,3,4\}$. Для такого способа кодирования информация ключа $\mathcal{K}$ в соответствии с состоянием Белла представлена в таблице 1. Алиса запоминает текущее состоянии кубитов и соответствующую информацию ключа $\mathcal{K}$.
 
 \item \textit{Шаг 2. Распределение кубитов.} Согласно договорённости Алиса знает, что рассматриваемые четыре кубита сгруппированы как $\{(P_1, P_3), (P_2, P_4)\}$, а Боб -- нет. Алиса случайным образом переставляет эти четыре кубита и отправляет их Бобу по квантовому каналу.
 
@@ -193,89 +198,45 @@
 
 Ещё раз отметим, что если Боб выберет правильную группировку с вероятностью $\frac{1}{3}$, он может получить правильную двоичную случайную последовательность с вероятностью $1$. В конечном счёте, порог для предложенного алгоритма может быть установлен равным $4.17\%$.
 
-\section{SECURITY ANALYSES}
-In this section, we analyze the security of our protocol under two major attacks: the intercept-resend attack and the Trojan Horse attack. Meanwhile, we assume the existence of
-an eavesdropper Eve in the communication channel.
-
-\subsection{The intercept-resend attack}
-The eavesdropper Eve can interact and resend a new four-qubit state to Bob so that he can acquire the information of the state. In this case, Eve plays the same role as Bob does in the communication. He can group the four-qubit state and measure it with Bell bases.
-
-After step $2$ of our protocol, the four qubits sent by Alice will transmit through the communication channel. Let’s assume that Eve intercepts these four qubits and processes
-them in the same way as Bob does. Then, Eve resends his decoy four qubits to Bob. Let us discuss the different cases of the communication between Eve and Bob.
-
-($1$) Eve chooses the right grouping and acquires the right measurement results. Bob simultaneously chooses the right grouping. Now, there are three parties, Alice, Bob and Eve
-in the communication. There is a probability of $p_1$ that Eve can successfully filch the information,
+Взаимная информация Алисы и Боба:
 
 \begin{equation*}
- p_1 = \Big(\dfrac{1}{3} \cdot 1 \Big)_{Eve} \times  \Big(\dfrac{1}{3} \cdot 1 \Big)_{Bob} = \dfrac{1}{9}.
+\mathcal{I}(A; B) = 1 - [- \varepsilon_0 \log_2 \varepsilon_0 -(1-\varepsilon_0)\log_2(1-\varepsilon_0) ] = 0,7501.
 \end{equation*}
 
-(2) Similarly, Eve can divide the qubits and obtain the measurement results correctly. Then, he sends the right decoy four-qubit state to Bob. After receiving them, Bob chooses a wrong grouping but yields a right measurement result.
+\section{Возможные атаки}
 
-However, this group of state will be abandoned since in the comparison stage Alice and Bob can detect the wrong grouping.
+\subsection{Атака перехвата --- повторной передачи}
+Одной из атак на QKD протоколы является атака перехвата --- повторной передачи \cite{ira1, ira2, ira3}. Суть атаки заключается в измерении злоумышленником (Евой) непосредственно квантового состояния носителя (например, фотона) и последующей повторной посылке нового фотона в состоянии, полученном в результате
+измерения. Поскольку злоумышленник не пропускает квантовые состояния отправителя, а генерирует новые и отправляет их получателю, то данная атака также называется непрозрачной. 
+
+В рассматриваемом случае Ева может взаимодействовать с полученным сообщением и повторно послать Бобу новое состояние из четырех кубитов, чтобы он продолжал получать сообщения. Тогда Ева играет ту же роль, что и Боб в процессе коммуникации. Злоумышленник аналогично Бобу может сгруппировать состояние из четырех кубитов и измерить его с помощью состояний Белла.
+
+После шага $2$ генерации секретного ключа, четыре кубита, отправленные Алисой, будут передаваться по квантовому каналу связи. Предположим, что Ева перехватывает эти четыре кубита и обрабатывает их так же, как и Боб. Затем Ева пересылает свои четыре обновлённых кубита Бобу. 
+
+Перебирая все возможные случаи группировок кубитов Евой и Бобом, можно получить полную вероятность того, что Боб получит неверный результат при измерении состояний Белла. Данная вероятность также называется долей ошибочных кубитов $\varepsilon_e$. Согласно \cite{base} $\varepsilon = 0,1597$.
+
+
+Найдём число битов двоичной случайной последовательности $n$, которые нужно сравнить Алисе и Бобу, чтобы обнаружить Еву с вероятностью $p_d = 1 - 10^{-9}$:
 
 \begin{equation*}
-p_2 = \Big(\dfrac{1}{3}\cdot 1 \Big)_{Eve} \times \Big(\dfrac{2}{3}\cdot \dfrac{1}{4} + 
-\dfrac{2}{3} \cdot \dfrac{5}{8} \Big)_{Bob} = \dfrac{14}{72}.
+p_d = 1 - \varepsilon_e ^n.
 \end{equation*}
+Минимальное значение $n = 11$ (\cite{base}), в то время как Алиса и Боб должны сравнить $n = 72$ в протоколе BB84 (\cite{eleven}), чтобы достичь аналогичной вероятности. 
 
-(3) Eve chooses a wrong grouping but he gets a right measurement result while Bob chooses a right grouping.
 
+Из вышеприведенных анализов мы можем вычислить взаимную информацию между Алисой, Бобом и Евой. 
+
+Вычислим взаимную информацию между Алисой и Евой:  
 \begin{equation*}
-p_3 = \Big(\dfrac{2}{3}\cdot \dfrac{1}{4} + 
-\dfrac{2}{3} \cdot \dfrac{5}{8} \Big)_{Eve} \times \Big( \dfrac{1}{3}\cdot 1 \Big)_{Bob} = \dfrac{14}{72}.
+\mathcal{I}(A, E) = 1 - [- \varepsilon_e \log_2 \varepsilon_e -(1-\varepsilon_e)\log_2 (1-\varepsilon_e) ] = 0,3664 \text{ бит}.
 \end{equation*}
 
-(4) In the same way, Eve transmits the decoy state with a wrong grouping but Bob gets the right results. Meanwhile, Bob divides this decoy four-qubit state into wrong groups but
-obtain the right measurement result. In this case, the qubits will be abandoned because of the wrong grouping of Bob.
-
+Таким образом, связь безопасна, поскольку $\mathcal{I}(A; B) > \mathcal{I}(A; E)$. Более того, $\mathcal{I}(A; B)$ в рассматриваемом протоколе больше чем $\mathcal{I'} (A; B) = 0,1887$ бит в протоколе BB84.
+Теоретическое значение секретности ключа:
 \begin{equation*}
-p_4 = Big(\dfrac{2}{3}\cdot \dfrac{1}{4} + 
-\dfrac{2}{3} \cdot \dfrac{5}{8} \Big)_{Eve} \times \Big(\dfrac{2}{3}\cdot \dfrac{1}{4} + 
-\dfrac{2}{3} \cdot \dfrac{5}{8} \Big)_{Bob} = \dfrac{49}{144}.
+\mathcal{R} = \mathcal{I}(A; B) - \mathcal{I}(A; E) = 0,7501 - 0,3664 = 0,3837 > 0.
 \end{equation*}
-
-In conclusion, there is a probability that Bob gets a wrong measurement result, i.e., the qubit error rate with existence of eavesdropper in our protocol can be calculated as (8).
-
-\begin{equation*}
-\varepsilon_e = 1 - \Big(\dfrac{1}{9} + \dfrac{14}{72} + \dfrac{14}{72} + \dfrac{49}{144} \Big) = \dfrac{23}{144} = 0.1597.
-\end{equation*}
-
-Suppose Alice and Bob need to compare n bits of binary random sequence to detect Eve with the probability of $p_d = 0.999999999$ with
-
-\begin{equation*}
-p_d = 1 - (1-\varepsilon_e) = 1 - \Big(\dfrac{23}{144} \Big)^n.
-\end{equation*}
-
-We can find a minimum value of $n = 11$ from equation (9). On the other hand, in BB84 protocol, Alice and Bob need to compare $n = 72$ bits to detect Eve with the same probability. From the aforementioned analyses, we can calculate the mutual information between Alice, Bob and Eve. The mutual information between Alice and Bob is
-
-\begin{equation*}
-I(A; B) = 1 - [-(1-\varepsilon_0)log(1-\varepsilon_0) - \varepsilon_0 log \varepsilon_0] = 0.7501.
-\end{equation*}
-
-The mutual information between Alice and Eve is 
-\begin{equation*}
-I(A; E) = 1 - [-(1-\varepsilon_e)log(1-\varepsilon_e) - \varepsilon_e log \varepsilon_e] = 0.3664.
-\end{equation*}
-
-Therefore, the communication is secure since $I(A; B) > I(A; E)$. Furthermore, $I(A; B)$ in our protocol is greater than $I' (A; B) = 0.1887$ bit in BB84 protocol.
-The theoretical secret key rate is
-\begin{equation*}
-R = I(A; B) - I(A; E) = 0.7501 - 0.3664 = 0.3837 > 0.
-\end{equation*}
-
-So, the binary random bits can be distilled after Alice and Bob perform key reconciliation and privacy amplification on the final key $\mathcal{R}'_A$ and $\mathcal{R}'_B$. The transmission distance $\mathcal{l}$ of the secret key is given by the qubit error rate $\varepsilon$ [12], which is:
-
-\begin{equation*}
-\varepsilon = \dfrac{\mu \eta 10^{- \frac{\alpha \mathcal{l}}{10}}}{\mu \eta 10^{- \frac{\alpha \mathcal{l}}{10}} + 2P_e}, 
-\end{equation*}
-
-where $\mu = 4$ is the averaged qubit flux leaving from Alice, $10^{- \frac{\alpha \mathcal{l}}{10}}$ represents the fiber attenuation through distance $\mathcal{l}$,
-$\eta$ is the detection efficiency. Here, we set the channel loss to be $\alpha = 0.2$ and
-$\alpha = 0.5$. Referring to [12], $P_e = 8.5 \cdot 10^{−7}$ is the probability of an error count per clock cycle. We set the values of $\eta$ to be $0.2$, $0.5$ and $0.99$.
-Figure 2 shows the relation between $\mathcal{l}$ (km) and the qubit error rate $\varepsilon$. We can see that $\mathcal{l}$ decreases with the increase of the channel loss. Meanwhile, the higher the detection efficiency of the communication $\eta$ is, the larger the qubit error rate $\varepsilon$ is. From Fig. 2, we can infer that there exists a further distance when $\varepsilon_e$ = 0.0417 which is the qubit error rate in our protocol.
-
-\cite{base}
 
 
 \subsection{Атака троянского коня}
@@ -284,7 +245,7 @@ Figure 2 shows the relation between $\mathcal{l}$ (km) and the qubit error rate 
 
 \begin{figure}[h]
 	\center{\includegraphics[width=0.5\linewidth]{trojan.jpg}}
-	\label{ris:image1}
+	\label{ris:image2}
 \end{figure}
 
 
