@@ -25,7 +25,7 @@
 \usepackage[margin=1in]{geometry}
 % Или если вы хотите задать поля менее явно (чем больше DIV, тем больше места под текст):
 % \usepackage[DIV=10]{typearea}
-
+\usepackage{xcolor}
 \usepackage{fancyhdr}
 
 \newcommand{\bbR}{\mathbb R}%теперь вместо длинной команды \mathbb R (множество вещественных чисел) можно писать короткую запись \bbR. Вместо \bbR вы можете вписать любую строчку букв, которая начинается с '\'.
@@ -33,6 +33,8 @@
 \newcommand{\bbN}{\mathbb N}
 \newcommand{\dif}{\mathrm{d}}
 %\usepackage[cal=boondox]{mathalfa} %todo
+\newcommand{\rc}{\textcolor{red}}
+\newcommand{\bc}{\textcolor{blue}}
 
 \pagestyle{fancy}
 \makeatletter % сделать "@" "буквой", а не "спецсимволом" - можно использовать "служебные" команды, содержащие @ в названии
@@ -48,7 +50,7 @@
 \makeatother
 \def\dd#1#2{\frac{\partial#1}{\partial#2}}
 
-\usepackage{xcolor}
+
 
 
 \bibliographystyle{acm}% Choose Phys. Rev. style for bibliography
@@ -248,7 +250,7 @@ p_d = 1 - \varepsilon_e ^n.
 Согласно полученному выражению и границам, представленным в \cite{trojan} мы можем заключить \cite{base}, что $\max\limits_{|\alpha|^2} \big\{\mathcal{I}_{Eve} (|\alpha|^2) \big\} < \mathcal{I}(A; B)$. Следовательно, атака троянского коня может
 быть предотвращена в рассматриваемом протоколе.
 
-\iffalse ... 
+%\iffalse ...   
 \section{Numerical Appendix}
 
 \begin{equation*}
@@ -259,9 +261,19 @@ p_d = 1 - \varepsilon_e ^n.
 
 
 \begin{align*}
-\ket{\mathcal{C}}_{1234} = \ket{\phi^-}_{12} \otimes \ket{\phi^+}_{34}
+\ket{\mathcal{C}}_{1234} &= \ket{\phi^-}_{12} \otimes \ket{\phi^+}_{34}
 = \dfrac{1}{2} \big(\ket{00}_{12} - \ket{11}_{12} \big) \otimes \big( \ket{00}_{34} + \ket{11}_{34} \big) = \nonumber \\
-= \dfrac{1}{2} \big(\ket{0000} + \ket{0011} - \ket{1100} - \ket{1111}\big)_{1234} =
+&= \dfrac{1}{2} \big(\ket{0000} + \ket{0011} - \ket{1100} - \ket{1111}\big)_{1234} = \nonumber \\
+&= \dfrac{1}{2} \big(\ket{\rc{00}\bc{00}} + \ket{\rc{00}\bc{11}} - \ket{\rc{11}\bc{00}} - \ket{\rc{11}\bc{11}}\big)_{\rc{12}\bc{34}} = \nonumber \\
+&= \dfrac{1}{\sqrt2} \big(\rc{\ket{00}_{12}} - \rc{\ket{11}_{12}} \big) \cdot \dfrac{1}{\sqrt2} \big( \bc{\ket{00}_{34}} + \bc{\ket{11}_{34}} \big) = \rc{\ket{\phi^-}_{12}} \bc{\ket{\phi^+}_{34}}
+\end{align*}
+
+
+\begin{align*}
+\ket{\mathcal{C}}_{1234} &= \ket{\phi^-}_{12} \otimes \ket{\phi^+}_{34}
+= \dfrac{1}{2} \big(\ket{00}_{12} - \ket{11}_{12} \big) \otimes \big( \ket{00}_{34} + \ket{11}_{34} \big) = \nonumber \\
+&= \dfrac{1}{2} \big(\ket{0000} + \ket{0011} - \ket{1100} - \ket{1111}\big)_{1234} = \nonumber \\
+&= \dfrac{1}{2} \big(\ket{\rc{0}\bc{0}\rc{0}\bc{0}} + \ket{\rc{0}\bc{0}\rc{1}\bc{1}} - \ket{\rc{1}\bc{1}\rc{0}\bc{0}} - \ket{\rc{1}\bc{1}\rc{1}\bc{1}}\big)_{\rc{1}\bc{2}\rc{3}\bc{4}}
 \end{align*}
 
 \begin{align*}
@@ -272,13 +284,25 @@ p_d = 1 - \varepsilon_e ^n.
 \end{align*}
 
 \begin{align*}
+\rc{\ket{\phi^+}_{13}} \bc{\ket{\phi^-}_{24}} = \dfrac{1}{2} \big(\rc{\ket{00}_{13}} \bc{\ket{00}_{24}} - \rc{\ket{00}_{13}} \bc{\ket{11}_{24}} 
++ \rc{\ket{11}_{13}} \bc{\ket{00}_{24}} - \rc{\ket{11}_{13}} \bc{\ket{11}_{24}} \big) \nonumber \\
+\rc{\ket{\phi^-}_{13}} \bc{\ket{\phi^+}_{24}} = \dfrac{1}{2} \big(\rc{\ket{00}_{13}} \bc{\ket{00}_{24}} + \rc{\ket{00}_{13}} \bc{\ket{11}_{24}} 
+- \rc{\ket{11}_{13}} \bc{\ket{00}_{24}} - \rc{\ket{11}_{13}} \bc{\ket{11}_{24}} \big) \nonumber \\
+\rc{\ket{\psi^+}_{13}} \bc{\ket{\psi^-}_{24}} = \dfrac{1}{2} \big(\rc{\ket{01}_{13}} \bc{\ket{01}_{24}} - \rc{\ket{01}_{13}} \bc{\ket{10}_{24}} 
++ \rc{\ket{10}_{13}} \bc{\ket{01}_{24}} - \rc{\ket{10}_{13}} \bc{\ket{10}_{24}} \big) \nonumber \\
+\rc{\ket{\psi^-}_{13}} \bc{\ket{\psi^+}_{24}} = \dfrac{1}{2} \big(\rc{\ket{01}_{13}} \bc{\ket{01}_{24}} + \rc{\ket{01}_{13}} \bc{\ket{10}_{24}} 
+- \rc{\ket{10}_{13}} \bc{\ket{01}_{24}} - \rc{\ket{10}_{13}} \bc{\ket{10}_{24}} \big)
+\end{align*}
+
+
+\begin{align*}
 \ket{\phi^+}_{m} \ket{\phi^-}_{n} = \dfrac{1}{2} \big(\ket{00}_m \ket{00}_n - \ket{00}_m \ket{11}_n + \ket{11}_m \ket{00}_n - \ket{11}_m \ket{11}_n \big) \nonumber \\
 \ket{\phi^-}_{m} \ket{\phi^+}_{n} = \dfrac{1}{2} \big(\ket{00}_m \ket{00}_n + \ket{00}_m \ket{11}_n - \ket{11}_m \ket{00}_n - \ket{11}_m \ket{11}_n \big) \nonumber \\
 \ket{\psi^+}_{m} \ket{\psi^-}_{n} = \dfrac{1}{2} \big(\ket{01}_m \ket{01}_n - \ket{01}_m \ket{10}_n + \ket{10}_m \ket{01}_n - \ket{10}_m \ket{10}_n \big)
 \nonumber \\
 \ket{\psi^-}_{m} \ket{\psi^+}_{n} = \dfrac{1}{2} \big(\ket{01}_m \ket{01}_n + \ket{01}_m \ket{10}_n - \ket{10}_m \ket{01}_n - \ket{10}_m \ket{10}_n \big)
 \end{align*}
-\fi
+%\fi
 
 \bibliography{ru}
 
